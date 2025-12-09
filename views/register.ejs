@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Patient registration</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <form method="POST">
+      <h1>Patient registration</h1>
+      <p>Please complete all fields.</p>
+      <section>
+        <h2>Personal information</h2>
+        <p>
+          <label for="first">First name:</label>
+          <input type="text" id="first" name="first" required />
+        </p>
+        <p>
+          <label for="last">Last name:</label>
+          <input type="text" id="last" name="last" required />
+        </p>
+        <p>
+          <label for="email">Email address:</label>
+          <input type="email" id="email" name="email" required />
+        </p>
+        <p>
+          <label for="nhs">NHS number:</label>
+          <input type="text" id="nhs" name="nhs" required />
+        </p>
+      </section>
+      <section>
+        <h2>Login information</h2>
+        <p>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </p>
+        <p>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </p>
+      </section>
+      <section>
+        <p><button type="Submit">Enter</button></p>
+      </section>
+    </form>
+  </body>
+</html>

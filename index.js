@@ -1,6 +1,7 @@
 // Imports
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 const ejs = require('ejs');
 const path = require('path');
 
@@ -32,6 +33,15 @@ const db = mysql.createPool({
     queueLimit: 0,
 });
 global.db = db;
+
+app.use(session({
+    secret: process.env.HEALTH_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}));
 
 // Load the route handlers
 const mainRoutes = require('./routes/main');

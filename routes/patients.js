@@ -4,10 +4,16 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 
 const patients = require('../models/patients');
+const redirectLogin = require('../middleware/redirectLogin');
 
 const saltRounds = 10;
 
 // Route handlers
+
+router.get('/', redirectLogin, function(req, res, next) {
+    res.render('patients.ejs');
+});
+
 router.get('/login', function(req, res, next) {
     res.render('login.ejs');
 });
@@ -21,7 +27,8 @@ router.post('/login', async function(req, res, next) {
         const hashedPassword = result[0].hashed_password;
         const match = await bcrypt.compare(req.body.password, hashedPassword);
         if (match) {
-            res.send("Successfull login");
+            req.session.userID = req.body.username;
+            res.redirect(process.env.HEALTH_BASE_PATH + '/patients/');
         } else {
             res.send("Login failed. Please check your credentials and try again.");
         }
@@ -43,8 +50,6 @@ router.post('/registered', async (req, res, next) => {
         console.error(err);
         next(err);
     }
-
-
 });
 
 // Export the router object so index.js can access it

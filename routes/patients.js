@@ -46,6 +46,16 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+// Route for logging out
+router.get('/logout', redirectLogin, (req,res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('./')
+        }
+        return res.redirect(process.env.HEALTH_BASE_PATH); // Returns to the homepage
+    });
+});
+
 router.get('/register', (req, res, next) => {
     res.render('register.ejs');
 });

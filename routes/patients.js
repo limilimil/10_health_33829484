@@ -10,6 +10,7 @@ const saltRounds = 10;
 
 // Route handlers
 
+// Route for patient landing page
 router.get('/', redirectLogin, function(req, res, next) {
     res.render('patients.ejs');
 });
@@ -28,7 +29,7 @@ router.post('/login', async function(req, res, next) {
         const match = await bcrypt.compare(req.body.password, hashedPassword);
         if (match) {
             req.session.userID = req.body.username;
-            res.redirect(process.env.HEALTH_BASE_PATH + '/patients/');
+            res.redirect(process.env.HEALTH_BASE_PATH + '/patients/'); // Successful logins redirects to the landing page
         } else {
             res.send("Login failed. Please check your credentials and try again.");
         }

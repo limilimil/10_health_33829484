@@ -11,8 +11,18 @@ const saltRounds = 10;
 // Route handlers
 
 // Route for patient landing page
-router.get('/', redirectLogin, function(req, res, next) {
-    res.render('patients.ejs');
+router.get('/', redirectLogin, async function(req, res, next) {
+    let patientName = ""; // Blank name in case of failure
+
+    // Get the patients first name to display on the page
+    if(req.session.userID) {
+        try {
+            patientName = await patients.getName(req.session.userID);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    res.render('patients.ejs', { patientName } );
 });
 
 router.get('/login', function(req, res, next) {

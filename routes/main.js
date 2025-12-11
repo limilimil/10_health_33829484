@@ -3,11 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 // Route handlers
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
     res.render('index.ejs');
 });
 
-router.get('/about', function(req, res, next) {
+router.get('/about', (req, res, next) => {
     res.render('about.ejs');
 });
 

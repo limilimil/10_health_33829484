@@ -11,7 +11,7 @@ const saltRounds = 10;
 // Route handlers
 
 // Route for patient landing page
-router.get('/', redirectLogin, async function(req, res, next) {
+router.get('/', redirectLogin, async (req, res, next) => {
     let patientName = ""; // Blank name in case of failure
 
     // Get the patients first name to display on the page
@@ -25,11 +25,11 @@ router.get('/', redirectLogin, async function(req, res, next) {
     res.render('patients.ejs', { patientName } );
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/login', (req, res, next) => {
     res.render('login.ejs');
 });
 
-router.post('/login', async function(req, res, next) {
+router.post('/login', async (req, res, next) => {
     const username = req.body.username;
     const result = await patients.getPatientAuth(username);
     if (result.length == 0) {
@@ -46,7 +46,7 @@ router.post('/login', async function(req, res, next) {
     }
 });
 
-router.get('/register', function(req, res, next) {
+router.get('/register', (req, res, next) => {
     res.render('register.ejs');
 });
 

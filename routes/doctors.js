@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Route handlers
-router.get('/login', function(req, res, next) {
+router.get('/login', (req, res, next) => {
     res.render('doctor_login.ejs');
 });
 

@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS patients (
     nhs_number CHAR(10) NOT NULL UNIQUE,
     username VARCHAR(30) NOT NULL UNIQUE,
     hashed_password CHAR(60) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_nhs_number_length CHECK (CHAR_LENGTH(nhs_number) = 10)
 );
 
 # Stores the doctor accounts

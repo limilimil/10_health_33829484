@@ -3,7 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
-const mysql = require('mysql2');
+
+// Import module for async database
+const mysql = require('mysql2/promise');
 
 // Create the express application object
 const app = express();

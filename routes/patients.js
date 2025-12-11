@@ -12,6 +12,21 @@ router.get('/login', function(req, res, next) {
     res.render('login.ejs');
 });
 
+router.post('/login', async function(req, res, next) {
+    const username = req.body.username;
+    const result = await patients.getPatientAuth(username);
+    if (result.length == 0) {
+        res.send("Login failed. Please check your credentials and try again.");
+    } else {
+        const hashedPassword = result[0].hashed_password;
+        const match = await bcrypt.compare(req.body.password, hashedPassword);
+        if (match) {
+            res.send("Successfull login");
+        } else {
+            res.send("Login failed. Please check your credentials and try again.");
+        }
+    }
+});
 
 router.get('/register', function(req, res, next) {
     res.render('register.ejs');

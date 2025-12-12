@@ -53,5 +53,8 @@ app.use('/patients', patientsRoutes);
 const doctorsRoutes = require('./routes/doctors');
 app.use('/doctors', doctorsRoutes);
 
+const appointmentsRoutes = require('./routes/appointments');
+app.use('/appointments', appointmentsRoutes);
+
 // Start the web app listening
 app.listen(port, () => console.log(`App listening on port ${port}!`));

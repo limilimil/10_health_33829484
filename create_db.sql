@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS doctors (
 # Stores the appointment statuses
 CREATE TABLE IF NOT EXISTS appointment_states (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    status VARCHAR(20)
+    status VARCHAR(20) NOT NULL
 );
 
 # Stores the appointment bookings

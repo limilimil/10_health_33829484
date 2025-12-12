@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-const patients = require('../models/patients');
+const patientsModel = require('../models/patientsModel');
 const redirectLogin = require('../middleware/redirectLogin');
 
 const saltRounds = 10;
@@ -17,7 +17,7 @@ router.get('/', redirectLogin, async (req, res, next) => {
     // Get the patients first name to display on the page
     if(req.session.userID) {
         try {
-            patientName = await patients.getName(req.session.userID);
+            patientName = await patientsModel.getName(req.session.userID);
         } catch (err) {
             console.error(err);
         }
@@ -31,7 +31,7 @@ router.get('/login', (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
     const username = req.body.username;
-    const result = await patients.getPatientAuth(username);
+    const result = await patientsModel.getPatientAuth(username);
     if (result.length == 0) {
         res.send("Login failed. Please check your credentials and try again.");
     } else {
@@ -65,7 +65,7 @@ router.post('/registered', async (req, res, next) => {
     try {
         const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
         const newUser = [req.body.first, req.body.last, req.body.email, req.body.nhs, req.body.username, hashedPassword];
-        const result = await patients.insert(newUser);
+        const result = await patientsModel.insert(newUser);
         res.send("Patient registered");
     } catch(err) {
         console.error(err);

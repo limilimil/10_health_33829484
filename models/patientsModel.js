@@ -1,4 +1,4 @@
-const patients = {
+const patientsModel = {
     // Inserts a new user into the patients database
     async insert(details) {
         const query = "INSERT INTO patients (first_name, last_name, email, nhs_number, username, hashed_password) VALUES (?,?,?,?,?,?)";
@@ -20,4 +20,4 @@ const patients = {
     }
 }
 
-module.exports = patients;
+module.exports = patientsModel;

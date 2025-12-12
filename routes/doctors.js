@@ -19,7 +19,7 @@ router.post('/login', async (req, res, next) => {
         const hashedPassword = result[0].hashed_password;
         const match = await bcrypt.compare(req.body.password, hashedPassword);
         if (match) {
-            req.session.userID = req.body.username;
+            req.session.adminID = req.body.username;
             res.redirect(process.env.HEALTH_BASE_PATH + '/doctors/dashboard'); // Successful logins redirects to the landing page
         } else {
             res.send("Login failed. Please check your credentials and try again.");
@@ -31,9 +31,9 @@ router.get('/dashboard', async (req, res, next) => {
     let doctorName = ""; // Blank name in case of failure
 
     // Get the doctors last name to display on the page
-    if(req.session.userID) {
+    if(req.session.adminID) {
         try {
-            doctorName = await doctorsModel.getLastName(req.session.userID);
+            doctorName = await doctorsModel.getLastName(req.session.adminID);
         } catch (err) {
             console.error(err);
         }

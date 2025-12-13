@@ -27,12 +27,19 @@
               <td>
                 <select id="status" name="status">
                   <% for (let i = 0; i < status.length; i++) { %>
-                  <option value="<%=status[i] %>" <%= appointment.status == status[i] ? 'selected' : '' %>><%=status[i] %></option>
+                  <option value="<%=status[i] %>" <%= appointment.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
                   <% } %>
                 </select>
               </td>
               <td><%= appointment.patient_id %></td>
-              <td><%= appointment.doctor_id %></td>
+              <td>
+                <select id="doctor" name="doctor">
+                  <option value="" <%= appointment.doctor_id == '' ? ' selected' : '' %>></option>
+                  <% for (let i = 0; i < doctors.length; i++) { %>
+                  <option value="<%=doctors[i].id %>" <%= appointment.doctor_id == doctors[i].id ? ' selected' : '' %>><%=doctors[i].id %> Dr <%=doctors[i].first_name %> <%=doctors[i].last_name %> </option>
+                  <% } %>
+                </select>
+              </td>
               <td><%= appointment.reason %></td>
             </tr>
         </tbody>

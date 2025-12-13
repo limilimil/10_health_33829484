@@ -1,6 +1,8 @@
 // Create a new router
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator');
+
 const bcrypt = require('bcrypt');
 
 const doctorsModel = require('../models/doctorsModel');
@@ -58,28 +60,45 @@ router.get('/appointments/:id', async (req, res, next) => {
     try {
         const result = await appointmentsModel.getAppointment(appointment_id);
         const appointment = result[0];
+
+        // Convert date to the correct format for html datetime-local input
+        if(appointment.appointment_datetime) {
+            appointment.appointment_datetime = appointment.appointment_datetime.toISOString().slice(0, 16);
+        }
+        
+        // Retrieve the list of states and flatten into a single array
         const states = await appointmentsModel.getStates();
         const status = states.map(Object.values).flat();
-        appointment.appointment_datetime = appointment.appointment_datetime.toISOString().slice(0, 16);
 
-        res.render('edit_appointment.ejs', { appointment, status });
+        const doctors = await doctorsModel.getDoctors();
+
+
+        res.render('edit_appointment.ejs', { appointment, status, doctors });
     } catch (err) {
         console.error(err);
     }
 });
 
-router.post('/appointments/:id', async (req, res, next) => {
+router.post('/appointments/:id', 
+    [
+        check('date').default(null),
+        check('doctor').default(null)
+    ], 
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        console.log(errors);
+        
+        const update = [req.body.date, req.body.status, req.body.doctor, req.params.id];
 
-    const update = [req.body.date, req.body.status, req.params.id];
+        try {
+            const result = await appointmentsModel.updateAppointment(update)
 
-    try {
-        const result = await appointmentsModel.updateAppointment(update)
-
-        res.send("Appointment updated");
-    } catch (err) {
-        console.error(err);
+            res.send("Appointment updated");
+        } catch (err) {
+            console.error(err);
+        }
     }
-});
+);
 
 // Export the router object so index.js can access it
 module.exports = router;

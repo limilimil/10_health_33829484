@@ -12,7 +12,15 @@ const doctorsModel = {
         const query = "SELECT last_name FROM doctors WHERE username = ?";
         const [result] = await db.query(query, username);
         return result[0].last_name;
+    },
+
+    async getDoctors() {
+        const query = "SELECT id, first_name, last_name FROM doctors";
+        const [result] = await db.query(query);
+        return result;
     }
+
+
 }
 
 module.exports = doctorsModel;

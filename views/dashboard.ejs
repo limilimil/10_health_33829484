@@ -13,7 +13,7 @@
   <tbody>
     <% for (let i = 0; i < appointments.length; i++) { %>
       <tr>
-        <td><%= appointments[i].id %></td>
+        <td><a href="/doctors/appointments/<%= appointments[i].id %>"><%= appointments[i].id %></a></td>
         <td><%= appointments[i].appointment_datetime %></td>
         <td><%= appointments[i].status %></td>
         <td><%= appointments[i].patient_id %></td>

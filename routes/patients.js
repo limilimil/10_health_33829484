@@ -4,14 +4,17 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 
 const patientsModel = require('../models/patientsModel');
+
+// Middleware
 const redirectLogin = require('../middleware/redirectLogin');
+const patientsRedirect = redirectLogin({ sessionID: 'userID', redirectPath: '/patients/login' });
 
 const saltRounds = 10;
 
 // Route handlers
 
 // Route for patient landing page
-router.get('/', redirectLogin, async (req, res, next) => {
+router.get('/', patientsRedirect, async (req, res, next) => {
     let patientName = ""; // Blank name in case of failure
 
     // Get the patients first name to display on the page
@@ -47,7 +50,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // Route for logging out
-router.get('/logout', redirectLogin, (req, res) => {
+router.get('/logout', patientsRedirect, (req, res) => {
     req.session.destroy(err => {
         if (err) {
             return res.redirect('./')

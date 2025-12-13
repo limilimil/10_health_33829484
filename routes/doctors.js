@@ -5,8 +5,13 @@ const { check, validationResult } = require('express-validator');
 
 const bcrypt = require('bcrypt');
 
+// Data models
 const doctorsModel = require('../models/doctorsModel');
 const appointmentsModel = require('../models/appointmentsModel');
+
+// Middleware
+const redirectLogin = require('../middleware/redirectLogin');
+const adminRedirect = redirectLogin({ sessionID: 'adminID', redirectPath: '/doctors/login' });
 
 const adminLayout = (req, res, next) => {
     res.locals.layout = 'layouts/adminLayout';
@@ -41,7 +46,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // Landing page for admin tasks
-router.get('/dashboard', async (req, res, next) => {
+router.get('/dashboard', adminRedirect, async (req, res, next) => {
     const doctor = {}
 
     // Get the doctors last name to display on the page
@@ -63,7 +68,7 @@ router.get('/dashboard', async (req, res, next) => {
 });
 
 // Route for viewing an individual appointment by its ID
-router.get('/appointments/:id', async (req, res, next) => {
+router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
     const appointment_id = req.params.id;
     try {
         const result = await appointmentsModel.getAppointment(appointment_id);
@@ -87,7 +92,7 @@ router.get('/appointments/:id', async (req, res, next) => {
     }
 });
 
-router.post('/appointments/:id', 
+router.post('/appointments/:id', adminRedirect,
     [
         check('date').default(null),
         check('doctor').default(null)

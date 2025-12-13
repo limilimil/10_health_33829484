@@ -2,12 +2,16 @@
 const express = require('express');
 const router = express.Router();
 
+// Data models
 const appointmentsModel = require('../models/appointmentsModel');
-const redirectLogin = require('../middleware/redirectLogin');
 const patientsModel = require('../models/patientsModel');
 
+// Middleware
+const redirectLogin = require('../middleware/redirectLogin');
+const patientsRedirect = redirectLogin({ sessionID: 'userID', redirectPath: '/patients/login' });
+
 // Route handlers
-router.get('/', redirectLogin, async (req, res, next) => {
+router.get('/', patientsRedirect, async (req, res, next) => {
 
     if(req.session.userID) {
         try {
@@ -22,12 +26,12 @@ router.get('/', redirectLogin, async (req, res, next) => {
 });
 
 // Handles the appointment request route
-router.get('/request', redirectLogin, (req, res, next) => {
+router.get('/request', patientsRedirect, (req, res, next) => {
     res.render('request.ejs', { title: 'Request an appointment' });
 });
 
 // Stores the patients appointment request in the database
-router.post('/request', redirectLogin, (req, res, next) => {
+router.post('/request', patientsRedirect, (req, res, next) => {
     const result = appointmentsModel.insertRequest([req.body.reason, req.session.userID]);
     res.send('Appointment request sent');
 });

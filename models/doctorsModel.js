@@ -18,8 +18,11 @@ const doctorsModel = {
         const query = "SELECT id, first_name, last_name FROM doctors";
         const [result] = await db.query(query);
         return result;
-    }
+    },
 
+    async getDoctor(id) {
+        const query = "SELECT first_name, last_name FROM doctors WHERE id = ?"
+    }
 
 }
 

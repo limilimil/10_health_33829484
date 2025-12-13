@@ -6,5 +6,27 @@
   </head>
   <body>
     <h1>Appointments</h1>
+    <form>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Doctor</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < appointments.length; i++) { %>
+            <tr>
+              <td><%= appointments[i].appointment_datetime %></td>
+              <td><%= appointments[i].status %></td>
+              <td><%= appointments[i].doctor_name ? `Dr ${appointments[i].doctor_name}` : "TBC" %></td>
+              <td><%= appointments[i].reason %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </form>
   </body>
 </html>

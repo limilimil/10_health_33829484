@@ -18,6 +18,12 @@ const patientsModel = {
         const query = "SELECT first_name FROM patients WHERE username = ?";
         const [result] = await db.query(query, username);
         return result[0].first_name;
+    },
+
+    async getID(username) {
+        const query = "SELECT id FROM patients WHERE username = ?";
+        const [result] = await db.query(query, username);
+        return result[0].id;
     }
 }
 

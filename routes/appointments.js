@@ -4,10 +4,21 @@ const router = express.Router();
 
 const appointmentsModel = require('../models/appointmentsModel');
 const redirectLogin = require('../middleware/redirectLogin');
+const patientsModel = require('../models/patientsModel');
 
 // Route handlers
-router.get('/', redirectLogin, (req, res, next) => {
-    res.render('appointments.ejs');
+router.get('/', redirectLogin, async (req, res, next) => {
+
+    if(req.session.userID) {
+        try {
+            const id = await patientsModel.getID(req.session.userID);
+            const appointments = await appointmentsModel.patientAppointments(id);
+
+            res.render('appointments.ejs', { appointments });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 });
 
 // Handles the appointment request route

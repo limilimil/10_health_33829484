@@ -7,7 +7,7 @@ const appointmentsModel = {
     },
 
     async getAppointments(values) {
-        let query = "SELECT * FROM appointments JOIN appointment_states ON status_id = appointment_states.id";
+        let query = "SELECT appointments.id, appointment_datetime, reason, patient_id, doctor_id, status FROM appointments JOIN appointment_states ON appointments.status_id = appointment_states.id";
         let predicates = [];
         let params = [];
 

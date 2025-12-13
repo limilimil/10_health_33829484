@@ -1,52 +1,43 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Edit appointment</title>
-    <link rel="stylesheet"  type="text/css" href="/main.css" />
-  </head>
-  <body>
-    <h1>Edit appointment</h1>
-    <form method="POST">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Patient ID</th>
-            <th>Doctor ID</th>
-            <th>Reason</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td><%= appointment.id %></td>
-              <td>  
-                <input type="datetime-local" id="date" name="date" value="<%= appointment.appointment_datetime %>">
-              </td>
-              <td>
-                <select id="status" name="status">
-                  <% for (let i = 0; i < status.length; i++) { %>
-                  <option value="<%=status[i] %>" <%= appointment.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
-                  <% } %>
-                </select>
-              </td>
-              <td><%= appointment.patient_id %></td>
-              <td>
-                <select id="doctor" name="doctor">
-                  <option value="" <%= appointment.doctor_id == '' ? ' selected' : '' %>></option>
-                  <% for (let i = 0; i < doctors.length; i++) { %>
-                  <option value="<%=doctors[i].id %>" <%= appointment.doctor_id == doctors[i].id ? ' selected' : '' %>><%=doctors[i].id %> Dr <%=doctors[i].first_name %> <%=doctors[i].last_name %> </option>
-                  <% } %>
-                </select>
-              </td>
-              <td><%= appointment.reason %></td>
-            </tr>
-        </tbody>
-      </table>
-      <section>
-        <p><button type="submit">Submit</button></p>
-      </section>
-    </form>
-  </body>
-</html>
+<h1>Edit appointment</h1>
+<form method="POST">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Patient ID</th>
+        <th>Doctor ID</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><%= appointment.id %></td>
+          <td>  
+            <input type="datetime-local" id="date" name="date" value="<%= appointment.appointment_datetime %>">
+          </td>
+          <td>
+            <select id="status" name="status">
+              <% for (let i = 0; i < status.length; i++) { %>
+              <option value="<%=status[i] %>" <%= appointment.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
+              <% } %>
+            </select>
+          </td>
+          <td><%= appointment.patient_id %></td>
+          <td>
+            <select id="doctor" name="doctor">
+              <option value="" <%= appointment.doctor_id == '' ? ' selected' : '' %>></option>
+              <% for (let i = 0; i < doctors.length; i++) { %>
+              <option value="<%=doctors[i].id %>" <%= appointment.doctor_id == doctors[i].id ? ' selected' : '' %>><%=doctors[i].id %> Dr <%=doctors[i].first_name %> <%=doctors[i].last_name %> </option>
+              <% } %>
+            </select>
+          </td>
+          <td><%= appointment.reason %></td>
+        </tr>
+    </tbody>
+  </table>
+  <section>
+    <p><button type="submit">Submit</button></p>
+  </section>
+</form>

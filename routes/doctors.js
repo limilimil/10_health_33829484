@@ -8,10 +8,18 @@ const bcrypt = require('bcrypt');
 const doctorsModel = require('../models/doctorsModel');
 const appointmentsModel = require('../models/appointmentsModel');
 
+const adminLayout = (req, res, next) => {
+    res.locals.layout = 'layouts/adminLayout';
+    res.locals.showNavbar = true;
+    next();
+}
+
+router.use(adminLayout);
+
 // Route handlers
 // Route for the doctors login page
 router.get('/login', (req, res, next) => {
-    res.render('doctor_login.ejs');
+    res.render('doctor_login.ejs', { showNavbar: false, title: "Doctor login"});
 });
 
 // For verifying the doctor login credentials
@@ -47,7 +55,7 @@ router.get('/dashboard', async (req, res, next) => {
     // Gets a list of appointments
     try {
         const appointments = await appointmentsModel.getAppointments();
-        res.render('dashboard.ejs', { doctor, appointments } );
+        res.render('dashboard.ejs', { title: 'Admin dashboard', doctor, appointments } );
     } catch (err) {
         console.error(err);
     }
@@ -73,7 +81,7 @@ router.get('/appointments/:id', async (req, res, next) => {
         const doctors = await doctorsModel.getDoctors();
 
 
-        res.render('edit_appointment.ejs', { appointment, status, doctors });
+        res.render('edit_appointment.ejs', { title: "Edit appointment", appointment, status, doctors });
     } catch (err) {
         console.error(err);
     }

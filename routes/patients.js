@@ -22,11 +22,11 @@ router.get('/', redirectLogin, async (req, res, next) => {
             console.error(err);
         }
     }
-    res.render('patients.ejs', { patientName } );
+    res.render('patients.ejs', { title: 'Overview', patientName } );
 });
 
 router.get('/login', (req, res, next) => {
-    res.render('login.ejs');
+    res.render('login.ejs', { title: 'Patients login' });
 });
 
 router.post('/login', async (req, res, next) => {
@@ -47,7 +47,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // Route for logging out
-router.get('/logout', redirectLogin, (req,res) => {
+router.get('/logout', redirectLogin, (req, res) => {
     req.session.destroy(err => {
         if (err) {
             return res.redirect('./')
@@ -57,7 +57,7 @@ router.get('/logout', redirectLogin, (req,res) => {
 });
 
 router.get('/register', (req, res, next) => {
-    res.render('register.ejs');
+    res.render('register.ejs', { title: 'Patient registration form'});
 });
 
 router.post('/registered', async (req, res, next) => {

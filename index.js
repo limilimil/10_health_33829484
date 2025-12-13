@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const expressLayouts = require('express-ejs-layouts');
 const ejs = require('ejs');
 const path = require('path');
 
@@ -15,6 +16,8 @@ const port = 8000;
 
 // Tell Express that we want to use EJS as the templating engine
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', 'layouts/layout');
 
 // Set up the body parser 
 app.use(express.urlencoded({ extended: true }));
@@ -42,6 +45,9 @@ app.use(session({
         expires: 600000
     }
 }));
+
+// Define application-specific data
+app.locals.appData = {appName: "General Practice"};
 
 // Load the route handlers
 const mainRoutes = require('./routes/main');

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet"  type="text/css" href="/main.css" />
+</head>
+<body>
+
+<% if (showNavbar) { %>
+  <%- include('../partials/adminNavbar') %>
+<% } %>
+
+<main>
+  <%- body %>
+</main>
+
+</body>
+</html>

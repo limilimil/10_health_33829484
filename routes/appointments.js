@@ -14,7 +14,7 @@ router.get('/', redirectLogin, async (req, res, next) => {
             const id = await patientsModel.getID(req.session.userID);
             const appointments = await appointmentsModel.patientAppointments(id);
 
-            res.render('appointments.ejs', { appointments });
+            res.render('appointments.ejs', { title: 'Appointments', appointments });
         } catch (err) {
             console.error(err);
         }
@@ -23,7 +23,7 @@ router.get('/', redirectLogin, async (req, res, next) => {
 
 // Handles the appointment request route
 router.get('/request', redirectLogin, (req, res, next) => {
-    res.render('request.ejs');
+    res.render('request.ejs', { title: 'Request an appointment' });
 });
 
 // Stores the patients appointment request in the database

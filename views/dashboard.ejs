@@ -5,6 +5,31 @@
     <link rel="stylesheet"  type="text/css" href="/main.css" />
   </head>
   <body>
-    <h1>Welcome Dr <%=doctorName %></h1>
+    <h1>Welcome Dr <%=doctor?.name || '' %></h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Patient ID</th>
+          <th>Doctor ID</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < appointments.length; i++) { %>
+          <tr>
+            <td><%= appointments[i].id %></td>
+            <td><%= appointments[i].appointment_datetime %></td>
+            <td><%= appointments[i].status %></td>
+            <td><%= appointments[i].patient_id %></td>
+            <td><%= appointments[i].doctor_id %></td>
+            <td><%= appointments[i].reason %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </body>
   </body>
 </html>

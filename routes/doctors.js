@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 
 const doctorsModel = require('../models/doctorsModel');
+const appointmentsModel = require('../models/appointmentsModel');
 
 // Route handlers
 router.get('/login', (req, res, next) => {
@@ -28,17 +29,25 @@ router.post('/login', async (req, res, next) => {
 });
 
 router.get('/dashboard', async (req, res, next) => {
-    let doctorName = ""; // Blank name in case of failure
+    const doctor = {}
 
     // Get the doctors last name to display on the page
     if(req.session.adminID) {
         try {
-            doctorName = await doctorsModel.getLastName(req.session.adminID);
+            doctor.name = await doctorsModel.getLastName(req.session.adminID);
         } catch (err) {
             console.error(err);
         }
     }
-    res.render('dashboard.ejs', { doctorName } );
+
+    try {
+        const appointments = await appointmentsModel.getAppointments();
+        console.log(appointments);
+        res.render('dashboard.ejs', { doctor, appointments } );
+    } catch (err) {
+        console.error(err);
+    }
+
 });
 
 // Export the router object so index.js can access it

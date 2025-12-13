@@ -10,10 +10,12 @@ router.get('/', redirectLogin, (req, res, next) => {
     res.render('appointments.ejs');
 });
 
+// Handles the appointment request route
 router.get('/request', redirectLogin, (req, res, next) => {
     res.render('request.ejs');
 });
 
+// Stores the patients appointment request in the database
 router.post('/request', redirectLogin, (req, res, next) => {
     const result = appointmentsModel.insertRequest([req.body.reason, req.session.userID]);
     res.send('Appointment request sent');

@@ -13,6 +13,7 @@ const patientsModel = {
         return result;
     },
 
+    // Returns the patients first name
     async getName(username) {
         const query = "SELECT first_name FROM patients WHERE username = ?";
         const [result] = await db.query(query, username);

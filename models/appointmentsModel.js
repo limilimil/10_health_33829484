@@ -34,6 +34,18 @@ const appointmentsModel = {
     // Helper function for retrieving a single appointment by id
     async getAppointment(appointment_id) {
         return this.getAppointments({ id: appointment_id });
+    },
+
+    async changeStatus(details) {
+        const query = "UPDATE appointments SET status_id = (SELECT id FROM appointment_states WHERE status = ?) WHERE id = ?"
+        const result = await db.query(query, details);
+        return result;
+    },
+
+    async getStates() {
+        const query = "SELECT status FROM appointment_states";
+        const [result] = await db.query(query);
+        return result;
     }
     
 }

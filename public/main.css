@@ -13,7 +13,7 @@ ul {
   list-style: none;
 }
 
-form {
+.form-container {
   margin: 0 auto;
   width: 400px;
   padding: 1em;
@@ -21,12 +21,12 @@ form {
   border-radius: 1em;
 }
 
-label span {
+.form-container label span {
   display: inline-block;
   text-align: right;
 }
 
-input,
+.form-container input,
 fieldset {
   font: 1em sans-serif;
   width: 250px;
@@ -34,21 +34,21 @@ fieldset {
   border: 1px solid #999999;
 }
 
-input[type="checkbox"],
+.form-container input[type="checkbox"],
 input[type="radio"] {
   width: auto;
   border: none;
 }
 
-button {
+.form-container button {
   margin-top: 20px;
 }
 
-label {
+.form-container label {
   display: inline-block;
 }
 
-p label {
+.form-container p label {
   width: 100%;
 }
 

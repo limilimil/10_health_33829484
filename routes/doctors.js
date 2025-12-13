@@ -59,7 +59,22 @@ router.get('/appointments/:id', async (req, res, next) => {
     try {
         const result = await appointmentsModel.getAppointment(appointment_id);
         const appointment = result[0];
-        res.render('edit_appointment.ejs', { appointment });
+        const states = await appointmentsModel.getStates();
+        const status = states.map(Object.values).flat();
+
+        res.render('edit_appointment.ejs', { appointment, status });
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+router.post('/appointments/:id', async (req, res, next) => {
+    const newStatus = [req.body.status, req.params.id];
+    
+    try {
+        const result = await appointmentsModel.changeStatus(newStatus)
+
+        res.send("Status updated");
     } catch (err) {
         console.error(err);
     }

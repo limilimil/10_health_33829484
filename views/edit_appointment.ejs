@@ -6,27 +6,38 @@
   </head>
   <body>
     <h1>Edit appointment</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Patient ID</th>
-          <th>Doctor ID</th>
-          <th>Reason</th>
-        </tr>
-      </thead>
-      <tbody>
+    <form method="POST">
+      <table>
+        <thead>
           <tr>
-            <td><%= appointment.id %></td>
-            <td><%= appointment.appointment_datetime %></td>
-            <td><%= appointment.status %></td>
-            <td><%= appointment.patient_id %></td>
-            <td><%= appointment.doctor_id %></td>
-            <td><%= appointment.reason %></td>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Patient ID</th>
+            <th>Doctor ID</th>
+            <th>Reason</th>
           </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+            <tr>
+              <td><%= appointment.id %></td>
+              <td><%= appointment.appointment_datetime %></td>
+              <td>
+                <select id="status" name="status" value="<%= appointment.status %>">
+                  <% for (let i = 0; i < status.length; i++) { %>
+                  <option value="<%=status[i] %>"><%=status[i] %></option>
+                  <% } %>
+                </select>
+              </td>
+              <td><%= appointment.patient_id %></td>
+              <td><%= appointment.doctor_id %></td>
+              <td><%= appointment.reason %></td>
+            </tr>
+        </tbody>
+      </table>
+      <section>
+        <p><button type="submit">Submit</button></p>
+      </section>
+    </form>
   </body>
 </html>

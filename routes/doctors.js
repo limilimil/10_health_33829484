@@ -7,10 +7,12 @@ const doctorsModel = require('../models/doctorsModel');
 const appointmentsModel = require('../models/appointmentsModel');
 
 // Route handlers
+// Route for the doctors login page
 router.get('/login', (req, res, next) => {
     res.render('doctor_login.ejs');
 });
 
+// For verifying the doctor login credentials
 router.post('/login', async (req, res, next) => {
     const username = req.body.username;
     const result = await doctorsModel.getDoctorsAuth(username);
@@ -28,6 +30,7 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+// Landing page for admin tasks
 router.get('/dashboard', async (req, res, next) => {
     const doctor = {}
 
@@ -39,7 +42,7 @@ router.get('/dashboard', async (req, res, next) => {
             console.error(err);
         }
     }
-
+    // Gets a list of appointments
     try {
         const appointments = await appointmentsModel.getAppointments();
         console.log(appointments);
@@ -50,6 +53,7 @@ router.get('/dashboard', async (req, res, next) => {
 
 });
 
+// Route for viewing an individual appointment by its ID
 router.get('/appointments/:id', async (req, res, next) => {
     const appointment_id = req.params.id;
     try {

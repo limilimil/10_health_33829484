@@ -45,7 +45,6 @@ router.get('/dashboard', async (req, res, next) => {
     // Gets a list of appointments
     try {
         const appointments = await appointmentsModel.getAppointments();
-        console.log(appointments);
         res.render('dashboard.ejs', { doctor, appointments } );
     } catch (err) {
         console.error(err);
@@ -61,6 +60,7 @@ router.get('/appointments/:id', async (req, res, next) => {
         const appointment = result[0];
         const states = await appointmentsModel.getStates();
         const status = states.map(Object.values).flat();
+        appointment.appointment_datetime = appointment.appointment_datetime.toISOString().slice(0, 16);
 
         res.render('edit_appointment.ejs', { appointment, status });
     } catch (err) {
@@ -69,12 +69,13 @@ router.get('/appointments/:id', async (req, res, next) => {
 });
 
 router.post('/appointments/:id', async (req, res, next) => {
-    const newStatus = [req.body.status, req.params.id];
-    
-    try {
-        const result = await appointmentsModel.changeStatus(newStatus)
 
-        res.send("Status updated");
+    const update = [req.body.date, req.body.status, req.params.id];
+
+    try {
+        const result = await appointmentsModel.updateAppointment(update)
+
+        res.send("Appointment updated");
     } catch (err) {
         console.error(err);
     }

@@ -21,11 +21,13 @@
         <tbody>
             <tr>
               <td><%= appointment.id %></td>
-              <td><%= appointment.appointment_datetime %></td>
+              <td>  
+                <input type="datetime-local" id="date" name="date" value="<%= appointment.appointment_datetime %>">
+              </td>
               <td>
-                <select id="status" name="status" value="<%= appointment.status %>">
+                <select id="status" name="status">
                   <% for (let i = 0; i < status.length; i++) { %>
-                  <option value="<%=status[i] %>"><%=status[i] %></option>
+                  <option value="<%=status[i] %>" <%= appointment.status == status[i] ? 'selected' : '' %>><%=status[i] %></option>
                   <% } %>
                 </select>
               </td>

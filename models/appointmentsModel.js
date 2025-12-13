@@ -36,8 +36,8 @@ const appointmentsModel = {
         return this.getAppointments({ id: appointment_id });
     },
 
-    async changeStatus(details) {
-        const query = "UPDATE appointments SET status_id = (SELECT id FROM appointment_states WHERE status = ?) WHERE id = ?"
+    async updateAppointment(details) {
+        const query = "UPDATE appointments SET appointment_datetime = ?, status_id = (SELECT id FROM appointment_states WHERE status = ?) WHERE id = ?"
         const result = await db.query(query, details);
         return result;
     },

@@ -16,6 +16,11 @@ const appointmentsModel = {
             params.push(values.status);
         }
 
+        if (values?.id) {
+            predicates.push("appointments.id = ?")
+            params.push(values.id);
+        }
+
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
             query += " WHERE " + predicates.join(" AND ");
@@ -23,6 +28,10 @@ const appointmentsModel = {
 
         const [result] = await db.query(query, params);
         return result;
+    },
+
+    async getAppointment(appointment_id) {
+        return this.getAppointments({ id: appointment_id });
     }
     
 }

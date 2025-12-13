@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Edit appointment</title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>Edit appointment</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Patient ID</th>
+          <th>Doctor ID</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td><%= appointment.id %></td>
+            <td><%= appointment.appointment_datetime %></td>
+            <td><%= appointment.status %></td>
+            <td><%= appointment.patient_id %></td>
+            <td><%= appointment.doctor_id %></td>
+            <td><%= appointment.reason %></td>
+          </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

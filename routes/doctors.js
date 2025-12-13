@@ -50,5 +50,16 @@ router.get('/dashboard', async (req, res, next) => {
 
 });
 
+router.get('/appointments/:id', async (req, res, next) => {
+    const appointment_id = req.params.id;
+    try {
+        const result = await appointmentsModel.getAppointment(appointment_id);
+        const appointment = result[0];
+        res.render('edit_appointment.ejs', { appointment });
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 // Export the router object so index.js can access it
 module.exports = router;

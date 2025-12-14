@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 // Data models
 const doctorsModel = require('../models/doctorsModel');
 const appointmentsModel = require('../models/appointmentsModel');
+const patientsModel = require('../models/patientsModel');
 
 // Middleware
 const redirectLogin = require('../middleware/redirectLogin');
@@ -128,6 +129,19 @@ router.post('/appointments/:id', adminRedirect,
         }
     }
 );
+
+// For viewing a patient records with their id as a url parameter
+router.get('/patients/:id', adminRedirect, async (req, res, next) => {
+    const patient_id = req.params.id;
+
+    try {
+        const patients = await patientsModel.getPatient(patient_id);
+        const appointments = await appointmentsModel.patientAppointments(patient_id);
+        res.render('patient_table.ejs', { title: "Patient", appointments, patients, patient_id});
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 // Export the router object so index.js can access it
 module.exports = router;

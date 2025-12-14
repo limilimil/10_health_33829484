@@ -137,7 +137,7 @@ router.get('/patients/:id', adminRedirect, async (req, res, next) => {
     try {
         const patients = await patientsModel.getPatient(patient_id);
         const appointments = await appointmentsModel.patientAppointments(patient_id);
-        res.render('patient_table.ejs', { title: "Patient", appointments, patients, patient_id});
+        res.render('patient_record.ejs', { title: "Patient", appointments, patients, patient_id});
     } catch (err) {
         console.error(err);
     }

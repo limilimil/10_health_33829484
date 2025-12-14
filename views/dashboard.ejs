@@ -1,4 +1,18 @@
 <h1>Welcome Dr <%=doctor?.name || '' %></h1>
+
+<form method="GET">
+  <section>
+    <select id="status" name="status">
+      <option value="" selected></option>
+      <% for (let i = 0; i < status.length; i++) { %>
+        <option value="<%=status[i] %>"><%=status[i] %></option>
+      <% } %>
+    </select>
+  </section>
+  <section>
+    <p><button type="submit">Submit</button></p>
+  </section>
+</form>
 <table>
   <thead>
     <tr>

@@ -20,7 +20,7 @@ const appointmentsModel = {
 
         // Filter appointments by status using the status name
         if (values?.status) {
-            predicates.push("status_id = (SELECT id FROM appointment_states WHERE status = ?");
+            predicates.push("status_id = (SELECT id FROM appointment_states WHERE status = ?)");
             params.push(values.status);
         }
 

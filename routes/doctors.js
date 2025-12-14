@@ -50,7 +50,10 @@ router.post('/login', async (req, res, next) => {
 // Landing page for admin tasks
 router.get('/dashboard', adminRedirect, async (req, res, next) => {
     const doctor = {}
-
+    const filters = {
+        status: req.query.status
+        
+    };
     // Get the doctors last name to display on the page
     if(req.session.adminID) {
         try {
@@ -61,8 +64,10 @@ router.get('/dashboard', adminRedirect, async (req, res, next) => {
     }
     // Gets a list of appointments
     try {
-        const appointments = await appointmentsModel.getAppointments();
-        res.render('dashboard.ejs', { title: 'Admin dashboard', doctor, appointments } );
+        const appointments = await appointmentsModel.getAppointments(filters);
+        const states = await appointmentsModel.getStates();
+        const status = states.map(Object.values).flat();
+        res.render('dashboard.ejs', { title: 'Admin dashboard', doctor, appointments, status } );
     } catch (err) {
         console.error(err);
     }

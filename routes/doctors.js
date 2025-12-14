@@ -130,6 +130,18 @@ router.post('/appointments/:id', adminRedirect,
     }
 );
 
+router.get('/patients', adminRedirect, async (req, res, next) => {
+    const filters = {};
+    filters.first_name = req.query.first_name ? req.query.first_name : "";
+    filters.last_name = req.query.last_name ? req.query.last_name : "";
+    try {
+        const patients = await patientsModel.getPatients(filters);
+        res.render('patient_list.ejs', { title: "Patient list", patients});
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 // For viewing a patient records with their id as a url parameter
 router.get('/patients/:id', adminRedirect, async (req, res, next) => {
     const patient_id = req.params.id;

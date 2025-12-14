@@ -44,6 +44,16 @@ const patientsModel = {
             predicates.push("id = ?");
             params.push(values.id);
         }
+
+        if(values?.first_name) {
+            predicates.push("first_name LIKE ?");
+            params.push("%" + values.first_name + "%");
+        }
+
+        if(values?.last_name) {
+            predicates.push("last_name LIKE ?");
+            params.push("%" + values.last_name + "%");
+        }
         
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {

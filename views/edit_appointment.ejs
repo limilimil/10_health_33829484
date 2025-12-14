@@ -15,7 +15,7 @@
         <tr>
           <td><%= appointment.id %></td>
           <td>  
-            <input type="datetime-local" id="date" name="date" value="<%= appointment.appointment_datetime %>">
+            <input type="datetime-local" id="date" name="date" value="<%= appointment.appointment_datetime %>" <%= disableForm %> />
           </td>
           <td>
             <select id="status" name="status">

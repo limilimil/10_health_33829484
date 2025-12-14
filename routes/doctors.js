@@ -76,6 +76,13 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
         const result = await appointmentsModel.getAppointment(appointment_id);
         const appointment = result[0];
 
+        // Prevent changes to the appointment form if the appointment date has already passed
+        let disableForm = "";
+        const now = new Date();
+        if(appointment.appointment_datetime < now) {
+            disableForm = "disabled";
+        }
+
         // Convert date to the correct format for html datetime-local input
         if(appointment.appointment_datetime) {
             appointment.appointment_datetime = appointment.appointment_datetime.toISOString().slice(0, 16);
@@ -88,7 +95,9 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
         const doctors = await doctorsModel.getDoctors();
 
 
-        res.render('edit_appointment.ejs', { title: "Edit appointment", appointment, status, doctors });
+
+
+        res.render('edit_appointment.ejs', { title: "Edit appointment", appointment, status, doctors, disableForm });
     } catch (err) {
         console.error(err);
     }

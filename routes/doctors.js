@@ -13,6 +13,7 @@ const appointmentsModel = require('../models/appointmentsModel');
 const redirectLogin = require('../middleware/redirectLogin');
 const adminRedirect = redirectLogin({ sessionID: 'adminID', redirectPath: '/doctors/login' });
 
+// Overide default layout with admin layout
 const adminLayout = (req, res, next) => {
     res.locals.layout = 'layouts/adminLayout';
     res.locals.showNavbar = true;
@@ -22,9 +23,10 @@ const adminLayout = (req, res, next) => {
 router.use(adminLayout);
 
 // Route handlers
+
 // Route for the doctors login page
 router.get('/login', (req, res, next) => {
-    res.render('doctor_login.ejs', { showNavbar: false, title: "Doctor login"});
+    res.render('doctor_login.ejs', { showNavbar: false, title: "Doctor login"}); // Navbar hidden to hide admin features from non-auth public view
 });
 
 // For verifying the doctor login credentials

@@ -79,7 +79,8 @@ router.get('/appointments', adminRedirect, async (req, res, next) => {
     const filters = {
         status: req.query.status,
         start_date: req.query.start_date,
-        end_date: req.query.end_date
+        end_date: req.query.end_date,
+        unassigned: req.query.unassigned // Rows without a date or doctor assigned
     };
     // Gets a list of appointments
     try {

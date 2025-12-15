@@ -45,6 +45,11 @@ const appointmentsModel = {
             params.push(values.end_date);
         }
 
+        // All rows where without a date or doctor
+        if (values?.unassigned) {
+            predicates.push("doctor_id IS NULL");
+        }
+
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
             query += " WHERE " + predicates.join(" AND ");

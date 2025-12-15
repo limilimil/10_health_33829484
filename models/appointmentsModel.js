@@ -1,5 +1,5 @@
-// Amount of rows returned by the model
-const limit = 20;
+// Default amount of rows returned by the model
+const defaultLimit = 20;
 
 const appointmentsModel = {
 
@@ -10,14 +10,10 @@ const appointmentsModel = {
         return result;
     },
 
-    // Retrieves a list of appointments from the database, can be filtered using an object of parameters
-    async getAppointments(values) {
-        let query = "SELECT appointments.id, appointment_datetime, reason, patient_id, doctor_id, CONCAT(doctors.first_name, ' ', doctors.last_name) AS doctor_name, status FROM appointments LEFT JOIN doctors ON appointments.doctor_id = doctors.id JOIN appointment_states ON appointments.status_id = appointment_states.id";
+    // Helper function for building WHERE statements
+    filterBuilder(values) {
         let predicates = [];
         let params = [];
-        const page = values?.page || 1; // First page is returned if none specified
-        const offset = (page - 1) * limit;
-
         // Filter appointments by status using the status name
         if (values?.status) {
             predicates.push("status_id = (SELECT id FROM appointment_states WHERE status = ?)");
@@ -49,18 +45,45 @@ const appointmentsModel = {
         if (values?.unassigned) {
             predicates.push("doctor_id IS NULL");
         }
-
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
-            query += " WHERE " + predicates.join(" AND ");
+            const where = " WHERE " + predicates.join(" AND ");
+            return {where, params};
+        }  else {
+            return {where: "", params};
         }
 
+    },
+
+    // Retrieves a list of appointments from the database, can be filtered using an object of parameters
+    async getAppointments(values, limit=defaultLimit) {
+        let query = "SELECT appointments.id, appointment_datetime, reason, patient_id, doctor_id, CONCAT(doctors.first_name, ' ', doctors.last_name) AS doctor_name, status FROM appointments LEFT JOIN doctors ON appointments.doctor_id = doctors.id JOIN appointment_states ON appointments.status_id = appointment_states.id";
+
+        const page = values?.page || 1; // First page is returned if none specified
+        const offset = (page - 1) * limit;
+
+
+
+        // // Combine WHERE predicates into a single statement
+        const subquery = this.filterBuilder(values);
+        query += subquery.where;
+        let params = subquery.params;
         query += " LIMIT ? OFFSET ?";
         params.push(limit);
         params.push(offset);
 
         const [result] = await db.query(query, params);
         return result;
+    },
+
+    // Returns the total amount of rows with filters
+    async rowCount(values) {
+        let query = "SELECT COUNT(*) AS total FROM appointments";
+        const subquery = this.filterBuilder(values);
+        query += subquery.where;
+        let params = subquery.params;
+        const [result] = await db.query(query, params);
+        return result[0].total;
     },
 
     // Helper function for retrieving a single appointment by id

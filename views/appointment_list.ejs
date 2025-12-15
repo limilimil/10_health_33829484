@@ -2,21 +2,25 @@
 <form method="GET">
   <section>
     <label for="start_date">Date to:</label>
-    <input type="date" id="start_date" name="start_date" />
+    <input type="date" id="start_date" name="start_date" value="<%=filters.start_date %>" />
     <label for="end_date">Date from:</label>
-    <input type="date" id="end_date" name="end_date" />
+    <input type="date" id="end_date" name="end_date" value="<%=filters.end_date%>/>
     <label for="status">Status:</label>
     <select id="status" name="status">
-      <option value="" selected></option>
+      <option value=""></option>
       <% for (let i = 0; i < status.length; i++) { %>
-        <option value="<%=status[i] %>"><%=status[i] %></option>
+        <option value="<%=status[i] %>" <%= filters.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
       <% } %>
     </select>
     <label for="unassigned">Show unassigned:</label>
-    <input type="checkbox" id="unassigned" name="unassigned" />
+    <input type="checkbox" id="unassigned" name="unassigned" <%= filters.unassigned == 'on' ? ' checked' : '' %>/>
   </section>
   <section>
     <p><button type="submit">Submit</button></p>
   </section>
+  <!-- <p><button type="submit" name="page" value="1">Submit</button></p> -->
 </form>
 <%- include('./partials/appointmentsTable') %>
+<a href="appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) -1, 1), totalPages) }) %>">Previous</a>
+<a href="appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) +1, 1), totalPages) }) %>">Next</a>
+

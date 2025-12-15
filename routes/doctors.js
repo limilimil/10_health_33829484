@@ -75,22 +75,28 @@ router.get('/dashboard', adminRedirect, async (req, res, next) => {
 
 });
 
-router.get('/appointments', adminRedirect, async (req, res, next) => {
-    const filters = {
-        status: req.query.status,
-        start_date: req.query.start_date,
-        end_date: req.query.end_date,
-        unassigned: req.query.unassigned // Rows without a date or doctor assigned
-    };
-    // Gets a list of appointments
-    try {
-        const appointments = await appointmentsModel.getAppointments(filters);
-        const states = await appointmentsModel.getStates();
-        const status = states.map(Object.values).flat();
-        res.render('appointment_list.ejs', { title: 'Appointments list', appointments, status } );
-    } catch (err) {
-        console.error(err);
-    }
+router.get('/appointments', adminRedirect, 
+    [
+        check('page').default(1)
+    ], async (req, res, next) => {
+        const errors = validationResult(req);
+        const filters = { ...req.query} ;
+
+        const limit = 5;
+        // Gets a list of appointments
+        try {
+            const totalRows = await appointmentsModel.rowCount(filters);
+            const totalPages = Math.ceil(totalRows / limit);
+            const page = Math.min(Math.max(Number(filters?.page), 1), totalPages);
+            filters.page = page;
+            const appointments = await appointmentsModel.getAppointments(filters, limit);
+
+            const states = await appointmentsModel.getStates();
+            const status = states.map(Object.values).flat();
+            res.render('appointment_list.ejs', { title: 'Appointments list', appointments, status, filters, page, totalPages} );
+        } catch (err) {
+            console.error(err);
+        }
 
 });
 

@@ -5,30 +5,84 @@
     <h2>Personal information</h2>
     <p>
       <label for="first">First name:</label>
-      <input type="text" id="first" name="first" required />
+      <input type="text" id="first" name="first" value="<%= formData?.first || '' %>" required />
+      <div class="error-messages">
+        <% if (errors?.first?.length) { %>
+          <ul>
+            <% errors.first.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
     <p>
       <label for="last">Last name:</label>
-      <input type="text" id="last" name="last" required />
+      <input type="text" id="last" name="last" value="<%= formData?.last || '' %>" required />
+      <div class="error-messages">
+        <% if (errors?.last?.length) { %>
+          <ul>
+            <% errors.last.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
     <p>
       <label for="email">Email address:</label>
-      <input type="email" id="email" name="email" required />
+      <input type="email" id="email" name="email" value="<%= formData?.email || '' %>" required />
+      <div class="error-messages">
+        <% if (errors?.email?.length) { %>
+          <ul>
+            <% errors.email.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
     <p>
       <label for="nhs">NHS number:</label>
-      <input type="text" id="nhs" name="nhs" required />
+      <input type="text" id="nhs" name="nhs" value="<%= formData?.nhs || '' %>" required />
+      <div class="error-messages">
+        <% if (errors?.nhs?.length) { %>
+          <ul>
+            <% errors.nhs.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
   </section>
   <section>
     <h2>Login information</h2>
     <p>
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required />
+      <input type="text" id="username" name="username" value="<%= formData?.username || '' %>" required />
+      <div class="error-messages">
+        <% if (errors?.username?.length) { %>
+          <ul>
+            <% errors.username.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
     <p>
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required />
+      <div class="error-messages">
+        <% if (errors?.password?.length) { %>
+          <ul>
+            <% errors.password.forEach(msg => { %>
+              <li><%= msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
     </p>
   </section>
   <section>

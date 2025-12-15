@@ -82,7 +82,7 @@ router.get('/appointments', adminRedirect,
         const errors = validationResult(req);
         const filters = { ...req.query} ;
 
-        const limit = 5;
+        const limit = 10;
         // Gets a list of appointments
         try {
             const totalRows = await appointmentsModel.rowCount(filters);
@@ -90,7 +90,7 @@ router.get('/appointments', adminRedirect,
             const page = Math.min(Math.max(Number(filters?.page), 1), totalPages);
             filters.page = page;
             const appointments = await appointmentsModel.getAppointments(filters, limit);
-
+            console.log(totalPages);
             const states = await appointmentsModel.getStates();
             const status = states.map(Object.values).flat();
             res.render('appointment_list.ejs', { title: 'Appointments list', appointments, status, filters, page, totalPages} );

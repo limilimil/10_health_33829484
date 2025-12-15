@@ -35,6 +35,16 @@ const appointmentsModel = {
             params.push(values.id);
         }
 
+        if (values?.start_date) {
+            predicates.push("appointment_datetime >= ?")
+            params.push(values.start_date);
+        }
+
+        if (values?.end_date) {
+            predicates.push("appointment_datetime <= ?")
+            params.push(values.end_date);
+        }
+
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
             query += " WHERE " + predicates.join(" AND ");

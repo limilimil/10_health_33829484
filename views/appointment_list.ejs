@@ -1,0 +1,20 @@
+<h1>List of appointments</h1>
+<form method="GET">
+  <section>
+    <label for="start_date">Date to:</label>
+    <input type="date" id="start_date" name="start_date" />
+    <label for="end_date">Date from:</label>
+    <input type="date" id="end_date" name="end_date" />
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="" selected></option>
+      <% for (let i = 0; i < status.length; i++) { %>
+        <option value="<%=status[i] %>"><%=status[i] %></option>
+      <% } %>
+    </select>
+  </section>
+  <section>
+    <p><button type="submit">Submit</button></p>
+  </section>
+</form>
+<%- include('./partials/appointmentsTable') %>

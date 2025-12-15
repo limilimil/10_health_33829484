@@ -75,6 +75,24 @@ router.get('/dashboard', adminRedirect, async (req, res, next) => {
 
 });
 
+router.get('/appointments', adminRedirect, async (req, res, next) => {
+    const filters = {
+        status: req.query.status,
+        start_date: req.query.start_date,
+        end_date: req.query.end_date
+    };
+    // Gets a list of appointments
+    try {
+        const appointments = await appointmentsModel.getAppointments(filters);
+        const states = await appointmentsModel.getStates();
+        const status = states.map(Object.values).flat();
+        res.render('appointment_list.ejs', { title: 'Appointments list', appointments, status } );
+    } catch (err) {
+        console.error(err);
+    }
+
+});
+
 // Route for viewing an individual appointment by its ID
 router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
     const appointment_id = req.params.id;

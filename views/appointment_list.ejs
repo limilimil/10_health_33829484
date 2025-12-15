@@ -13,7 +13,7 @@
       <% } %>
     </select>
     <label for="unassigned">Show unassigned:</label>
-    <input type="checkbox" id="unassigned" name="unassigned" <%= filters.unassigned == 'on' ? ' checked' : '' %>/>
+    <input type="checkbox" id="unassigned" name="unassigned" value="true" <%= filters.unassigned === true ? ' checked' : '' %>/>
   </section>
   <section>
     <p><button type="submit">Submit</button></p>

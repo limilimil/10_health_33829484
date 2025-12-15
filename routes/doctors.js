@@ -1,7 +1,7 @@
 // Create a new router
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const { check, query, validationResult, matchedData } = require('express-validator');
 
 const bcrypt = require('bcrypt');
 
@@ -77,10 +77,16 @@ router.get('/dashboard', adminRedirect, async (req, res, next) => {
 
 router.get('/appointments', adminRedirect, 
     [
-        check('page').default(1)
+        query('page').toInt().default(1).customSanitizer(num => num < 1 ? 1 : num).isInt({ min: 1 }),
+        query('status').optional(),
+        query('start_date').optional({ values: "falsy" }).isDate(),
+        query('end_date').optional({ values: "falsy" }).isDate(),
+        query('unassigned').optional({ values: "falsy" }).not().isInt().withMessage("Input only values true or false").isBoolean().withMessage("Input only values true or false").toBoolean()
     ], async (req, res, next) => {
         const errors = validationResult(req);
-        const filters = { ...req.query} ;
+        const data = matchedData(req);
+ 
+        const filters = data;
 
         const limit = 10;
         // Gets a list of appointments
@@ -90,7 +96,6 @@ router.get('/appointments', adminRedirect,
             const page = Math.min(Math.max(Number(filters?.page), 1), totalPages);
             filters.page = page;
             const appointments = await appointmentsModel.getAppointments(filters, limit);
-            console.log(totalPages);
             const states = await appointmentsModel.getStates();
             const status = states.map(Object.values).flat();
             res.render('appointment_list.ejs', { title: 'Appointments list', appointments, status, filters, page, totalPages} );

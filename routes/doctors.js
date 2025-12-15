@@ -48,6 +48,16 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+// Route for logging out
+router.get('/logout', adminRedirect, (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('./')
+        }
+        return res.redirect(process.env.HEALTH_BASE_PATH); // Returns to the homepage
+    });
+});
+
 // Landing page for admin tasks
 router.get('/dashboard', adminRedirect, async (req, res, next) => {
     const doctor = {}

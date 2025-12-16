@@ -1,26 +1,42 @@
 <h1>List of appointments</h1>
-<form method="GET">
+<form class="form-wrapper" method="GET">
   <section>
-    <label for="start_date">Date from:</label>
-    <input type="date" id="start_date" name="start_date" value="<%=filters.start_date %>" />
-    <label for="end_date">Date to:</label>
-    <input type="date" id="end_date" name="end_date" value="<%=filters.end_date%>/>
-    <label for="status">Status:</label>
-    <select id="status" name="status">
-      <option value=""></option>
-      <% for (let i = 0; i < status.length; i++) { %>
-        <option value="<%=status[i] %>" <%= filters.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
-      <% } %>
-    </select>
-    <label for="unassigned">Show unassigned:</label>
-    <input type="checkbox" id="unassigned" name="unassigned" value="true" <%= filters.unassigned === true ? ' checked' : '' %>/>
+    <div class="form-group">
+      <label for="start_date">Date from:</label>
+      <input type="date" id="start_date" name="start_date" value="<%=filters.start_date %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="end_date">Date to:</label>
+      <input type="date" id="end_date" name="end_date" value="<%=filters.end_date%>"/>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select id="status" name="status">
+        <option value=""></option>
+        <% for (let i = 0; i < status.length; i++) { %>
+          <option value="<%=status[i] %>" <%= filters.status == status[i] ? ' selected' : '' %>><%=status[i] %></option>
+        <% } %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="unassigned">Show unassigned:
+      <input type="checkbox" id="unassigned" name="unassigned" value="true" <%= filters.unassigned === true ? ' checked' : '' %>/>
+      </label>
+    </div>
   </section>
-  <section>
-    <p><button type="submit">Submit</button></p>
+
+  <section class="form-actions">
+    <button type="submit">Apply filters</button>
   </section>
 </form>
+
 <!-- Pagination controls including page numbers -->
+ <div class="table-wrapper">
 <%- include('./partials/appointmentsTable') %>
+<div class="table-links">
 <a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) -1, 1), totalPages) }) %>">Previous</a>
 <% for (let i = 1; i < totalPages+1; i++) { %>
   <% if (i === Number(filters.page)) { %>
@@ -30,4 +46,5 @@
   <% } %>
 <% } %>
 <a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) +1, 1), totalPages) }) %>">Next</a>
-
+  </div>
+</div>

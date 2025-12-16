@@ -54,7 +54,7 @@ router.get('/logout', adminRedirect, (req, res) => {
         if (err) {
             return res.redirect('./')
         }
-        return res.redirect(process.env.HEALTH_BASE_PATH); // Returns to the homepage
+        return res.redirect(process.env.HEALTH_BASE_PATH + '/doctors/login'); // Returns to the admin login page
     });
 });
 
@@ -117,7 +117,7 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
         // Prevent changes to the appointment form if the appointment date has already passed
         let disableForm = "";
         const now = new Date();
-        console.log(appointment.appointment_datetime);
+        
         if(appointment.appointment_datetime && appointment.appointment_datetime < now) {
             disableForm = "disabled";
         }

@@ -94,7 +94,6 @@ router.post('/registered',
 
     ], async (req, res, next) => {
         const errors = validationResult(req);
-        const data = matchedData(req);
         if (!errors.isEmpty()) {
             // Retrieves relevant error messages to be displayed on the user interface
             const errorMessages = { first: [], last: [], email: [], nhs: [], username: [], password: [] };
@@ -105,8 +104,16 @@ router.post('/registered',
                 }
             }
             // Loads the registration page again with error messages and previous inputs except password
-            res.render('./register', { title: "Patient registration form", errors: errorMessages, formData: data });
+            res.render('./register', { title: "Patient registration form", errors: errorMessages, formData: req.body });
         } else {
+            const data = matchedData(req);
+
+            // Sanitise user inputs
+            data.first = req.sanitize(data.first);
+            data.last = req.sanitize(data.last);
+            data.email = req.sanitize(data.email);
+            data.nhs = req.sanitize(data.nhs);
+            data.username = req.sanitize(data.username);
             const plainPassword = data.password;
             try {
                 const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);

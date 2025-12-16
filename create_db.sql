@@ -6,6 +6,7 @@ USE health;
 
 # Create the tables
 # Stores the patient accounts
+# Only accepts 10 digit NHS numbers
 CREATE TABLE IF NOT EXISTS patients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,

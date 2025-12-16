@@ -1,5 +1,8 @@
 body {
+  /* Off white background for dyslexia accessibility */
   background-color: rgb(250 249 246 / 100%);
+  /* Accessible font family with sans-serif */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h1 {
@@ -23,6 +26,7 @@ ul {
   list-style: none;
 }
 
+/* Container for input forms */
 .form-container {
   margin: 0 auto;
   width: 400px;

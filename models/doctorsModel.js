@@ -8,10 +8,10 @@ const doctorsModel = {
     },
 
     // Returns the doctors last name
-    async getLastName(username) {
-        const query = "SELECT last_name FROM doctors WHERE username = ?";
+    async getDoctorWithUsername(username) {
+        const query = "SELECT first_name, last_name, id FROM doctors WHERE username = ?";
         const [result] = await db.query(query, username);
-        return result[0].last_name;
+        return result[0];
     },
 
     async getDoctors() {

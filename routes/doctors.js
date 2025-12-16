@@ -60,25 +60,17 @@ router.get('/logout', adminRedirect, (req, res) => {
 
 // Landing page for admin tasks
 router.get('/dashboard', adminRedirect, async (req, res, next) => {
-    const doctor = {}
-    const filters = {
-        status: req.query.status
-        
-    };
-    // Get the doctors last name to display on the page
-    if(req.session.adminID) {
-        try {
-            doctor.name = await doctorsModel.getLastName(req.session.adminID);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-    // Gets a list of appointments
+
     try {
-        const appointments = await appointmentsModel.getAppointments(filters);
-        const states = await appointmentsModel.getStates();
-        const status = states.map(Object.values).flat();
-        res.render('dashboard.ejs', { title: 'Admin dashboard', doctor, appointments, status } );
+        // Get the doctors name and details to display on the page
+        const doctor = await doctorsModel.getDoctorWithUsername(req.session.adminID);
+        const params = {
+        doctor_id: doctor.id,
+        upcoming: true,
+    };
+        // Gets a list of appointments
+        const appointments = await appointmentsModel.getAppointments(params, 10);
+        res.render('dashboard.ejs', { title: 'Admin dashboard', doctor, appointments } );
     } catch (err) {
         console.error(err);
     }
@@ -125,7 +117,8 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
         // Prevent changes to the appointment form if the appointment date has already passed
         let disableForm = "";
         const now = new Date();
-        if(appointment?.appointment_datetime < now) {
+        console.log(appointment.appointment_datetime);
+        if(appointment.appointment_datetime && appointment.appointment_datetime < now) {
             disableForm = "disabled";
         }
 

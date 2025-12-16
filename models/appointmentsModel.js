@@ -31,6 +31,11 @@ const appointmentsModel = {
             params.push(values.id);
         }
 
+        if(values?.doctor_id) {
+            predicates.push("doctor_id = ?");
+            params.push(values.doctor_id);
+        }
+
         if (values?.start_date) {
             predicates.push("appointment_datetime >= ?")
             params.push(values.start_date);
@@ -73,7 +78,7 @@ const appointmentsModel = {
         let params = subquery.params;
 
         // Rows without a date and status pending (unfulfilled appointment requests) are ordered first followed by appointment date in descending order 
-        query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 ELSE 1 END, appointment_datetime DESC";
+        query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 ELSE 1 END, appointment_datetime ASC";
 
         // Applies a limit on the number of rows returned
         query += " LIMIT ? OFFSET ?";
@@ -104,12 +109,19 @@ const appointmentsModel = {
         return this.getAppointments({ patient_id, upcoming: upcomingOnly });
     },
 
+    // Helper function for retrieving all appointments assigned to a doctor
+    async doctorAppointments(doctor_id, upcomingOnly = false) {
+        return this.getAppointments({ doctor_id, upcoming: upcomingOnly });
+    },
+
+    // Updates an appointment entry in the database
     async updateAppointment(details) {
         const query = "UPDATE appointments SET appointment_datetime = ?, status_id = (SELECT id FROM appointment_states WHERE status = ?), doctor_id = ? WHERE id = ?"
         const result = await db.query(query, details);
         return result;
     },
 
+    // Sets an appointment to the cancellation state
     async cancel(id) {
         const query = "UPDATE appointments SET appointment_datetime = NULL, status_id = (SELECT id FROM appointment_states WHERE status = 'cancelled'), doctor_id = NULL WHERE id = ?"
         const result = await db.query(query, id);

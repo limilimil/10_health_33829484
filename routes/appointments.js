@@ -26,7 +26,6 @@ router.get('/', patientsRedirect, async (req, res, next) => {
 
 // Cancels an apppointment
 router.post('/', patientsRedirect, (req, res, next) => {
-    console.log(req.body.id);
     const result = appointmentsModel.cancel([req.body.id]);
     res.send('Appointment cancelled');
 });

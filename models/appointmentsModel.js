@@ -20,6 +20,7 @@ const appointmentsModel = {
             params.push(values.status);
         }
 
+        // Filter results by patient id
         if(values?.patient_id) {
             predicates.push("patient_id = ?");
             params.push(values.patient_id);
@@ -31,26 +32,30 @@ const appointmentsModel = {
             params.push(values.id);
         }
 
+        // Filter results by doctor id
         if(values?.doctor_id) {
             predicates.push("doctor_id = ?");
             params.push(values.doctor_id);
         }
 
+        // Earliest appointment date to return
         if (values?.start_date) {
             predicates.push("appointment_datetime >= ?")
             params.push(values.start_date);
         }
 
+        // Latest appointment date to return
         if (values?.end_date) {
             predicates.push("appointment_datetime <= ?")
             params.push(values.end_date);
         }
 
-        // All rows where without a date or doctor
+        // All rows without a doctor assigned
         if (values?.unassigned) {
             predicates.push("doctor_id IS NULL");
         }
 
+        // Only returns future appointments and unassigned appointments (No date and pending status)
         if (values?.upcoming) {
             predicates.push("(appointment_datetime > CURDATE() OR (appointment_datetime IS NULL AND status_id = (SELECT id FROM appointment_states WHERE status = 'pending')))");
         }
@@ -67,8 +72,10 @@ const appointmentsModel = {
 
     // Retrieves a list of appointments from the database, can be filtered using an object of parameters
     async getAppointments(values, limit=defaultLimit) {
+        // Base query
         let query = "SELECT appointments.id, appointment_datetime, reason, patient_id, doctor_id, CONCAT(doctors.first_name, ' ', doctors.last_name) AS doctor_name, status FROM appointments LEFT JOIN doctors ON appointments.doctor_id = doctors.id JOIN appointment_states ON appointments.status_id = appointment_states.id";
 
+        // Calculates the position of rows to return based on the limit and current page, for pagination
         const page = values?.page || 1; // First page is returned if none specified
         const offset = (page - 1) * limit;
 
@@ -77,7 +84,7 @@ const appointmentsModel = {
         query += subquery.where;
         let params = subquery.params;
 
-        // Rows without a date and status pending (unfulfilled appointment requests) are ordered first followed by appointment date in descending order 
+        // Rows without a date and status pending (unfulfilled appointment requests) are ordered first followed by appointment date in ascending order 
         query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 ELSE 1 END, appointment_datetime ASC";
 
         // Applies a limit on the number of rows returned
@@ -128,6 +135,7 @@ const appointmentsModel = {
         return result;
     },
 
+    // Retrieve the list of all statuses
     async getStates() {
         const query = "SELECT status FROM appointment_states";
         const [result] = await db.query(query);

@@ -1,9 +1,9 @@
 <h1>List of appointments</h1>
 <form method="GET">
   <section>
-    <label for="start_date">Date to:</label>
+    <label for="start_date">Date from:</label>
     <input type="date" id="start_date" name="start_date" value="<%=filters.start_date %>" />
-    <label for="end_date">Date from:</label>
+    <label for="end_date">Date to:</label>
     <input type="date" id="end_date" name="end_date" value="<%=filters.end_date%>/>
     <label for="status">Status:</label>
     <select id="status" name="status">
@@ -18,8 +18,8 @@
   <section>
     <p><button type="submit">Submit</button></p>
   </section>
-  <!-- <p><button type="submit" name="page" value="1">Submit</button></p> -->
 </form>
+<!-- Pagination controls including page numbers -->
 <%- include('./partials/appointmentsTable') %>
 <a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) -1, 1), totalPages) }) %>">Previous</a>
 <% for (let i = 1; i < totalPages+1; i++) { %>

@@ -22,12 +22,14 @@ const patientsModel = {
         return result[0].first_name;
     },
 
+    // Return the patients username using ID
     async getID(username) {
         const query = "SELECT id FROM patients WHERE username = ?";
         const [result] = await db.query(query, username);
         return result[0].id;
     },
 
+    // Returns a list of patients
     async getPatients(values) {
         let query = "SELECT id, first_name, last_name, nhs_number, email, username FROM patients";
         let predicates = [];
@@ -45,11 +47,13 @@ const patientsModel = {
             params.push(values.id);
         }
 
+        // Filter patients by first name
         if(values?.first_name) {
             predicates.push("first_name LIKE ?");
             params.push("%" + values.first_name + "%");
         }
 
+        // Filter patients by last name
         if(values?.last_name) {
             predicates.push("last_name LIKE ?");
             params.push("%" + values.last_name + "%");
@@ -60,7 +64,7 @@ const patientsModel = {
             query += " WHERE " + predicates.join(" AND ");
         }
 
-        // Must be last as limit follows where
+        // Must be last as LIMIT follows WHERE and ORDER
         query += " LIMIT ? OFFSET ?";
         params.push(limit);
         params.push(offset);

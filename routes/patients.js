@@ -13,20 +13,29 @@ const patientsRedirect = redirectLogin({ sessionID: 'userID', redirectPath: '/pa
 
 const saltRounds = 10;
 
+// Validation rules for NHS numbers
 function validatekNHSNumber(nhsNumber) {
+    // Remove whitespace
     const digits = nhsNumber.replace(/\s+/g, '');
+
+    // Convert to an array of single digit numbers
     const numbers = digits.split('').map(Number);
+
+    // Checks if there are exactly 10 digits
     if (numbers.length !== 10) {
         return false;
     }
 
+    // Multiply first 9 digits by descending weights 
     let sum = 0;
     for (let i = 0; i < 9; i++) {
         sum += numbers[i] * (10 - i);
     }
+
+    // Calculate the check digit
     const remainder = sum % 11;
     const checkDigit = remainder === 0 ? 0 : 11 - remainder;
-    if (checkDigit === 10) return false;
+    if (checkDigit === 10) return false; // Check digit cannot be 10
     
     return checkDigit === numbers[9];
 }
@@ -48,10 +57,12 @@ router.get('/', patientsRedirect, async (req, res, next) => {
     res.render('patients.ejs', { title: 'Overview', patientName } );
 });
 
+// Login route
 router.get('/login', (req, res, next) => {
     res.render('login.ejs', { title: 'Patients login' });
 });
 
+// Verify login
 router.post('/login', async (req, res, next) => {
     const username = req.body.username;
     const result = await patientsModel.getPatientAuth(username);
@@ -79,6 +90,7 @@ router.get('/logout', patientsRedirect, (req, res) => {
     });
 });
 
+// Route for registration page
 router.get('/register', (req, res, next) => {
     res.render('register.ejs', { title: 'Patient registration form', errors: {}, formData: {} });
 });
@@ -116,7 +128,9 @@ router.post('/registered',
             data.username = req.sanitize(data.username);
             const plainPassword = data.password;
             try {
+                // Password hashing
                 const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+                // Inserts user into the database
                 const newUser = [data.first, data.last, data.email, data.nhs, data.username, hashedPassword];
                 const result = await patientsModel.insert(newUser);
                 res.send("Patient registered");

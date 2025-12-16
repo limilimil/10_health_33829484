@@ -3,7 +3,14 @@
   <section>
     <p>
       <label for="reason">Describe your symptoms or health concern:</label>
-      <textarea id="reason" name="reason" rows="10" cols="50" required></textarea>
+      <textarea id="reason" name="reason" rows="10" cols="50" required><%= reason || '' %></textarea>
+      <div class="error-messages">
+        <% if (errorMessage) { %>
+          <ul>
+              <li><%= errorMessage %></li>
+          </ul>
+        <% } %>
+      </div>
     </p>
   </section>
   <section>

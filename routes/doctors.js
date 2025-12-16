@@ -133,9 +133,6 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
 
         const doctors = await doctorsModel.getDoctors();
 
-
-
-
         res.render('edit_appointment.ejs', { title: "Edit appointment", appointment, status, doctors, disableForm });
     } catch (err) {
         console.error(err);

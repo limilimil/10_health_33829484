@@ -24,12 +24,10 @@ function validatekNHSNumber(nhsNumber) {
     for (let i = 0; i < 9; i++) {
         sum += numbers[i] * (10 - i);
     }
-
     const remainder = sum % 11;
     const checkDigit = remainder === 0 ? 0 : 11 - remainder;
-
     if (checkDigit === 10) return false;
-
+    
     return checkDigit === numbers[9];
 }
 
@@ -120,7 +118,6 @@ router.post('/registered',
                 next(err);
             }
         }
-
 });
 
 // Export the router object so index.js can access it

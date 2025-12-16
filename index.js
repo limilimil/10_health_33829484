@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const expressSanitizer = require('express-sanitizer');
 const expressLayouts = require('express-ejs-layouts');
 const ejs = require('ejs');
 const path = require('path');
@@ -37,6 +38,7 @@ const db = mysql.createPool({
 });
 global.db = db;
 
+// Create a session
 app.use(session({
     secret: process.env.HEALTH_SESSION_SECRET,
     resave: false,
@@ -45,6 +47,9 @@ app.use(session({
         expires: 600000
     }
 }));
+
+// Create an input sanitizer
+app.use(expressSanitizer());
 
 // Define application-specific data
 app.locals.appData = {appName: "General Practice"};

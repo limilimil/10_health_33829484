@@ -1,6 +1,7 @@
 // Create a new router
 const express = require('express');
 const router = express.Router();
+const { check, validationResult, matchedData } = require('express-validator');
 
 // Data models
 const appointmentsModel = require('../models/appointmentsModel');
@@ -32,14 +33,26 @@ router.post('/', patientsRedirect, (req, res, next) => {
 
 // Handles the appointment request route
 router.get('/request', patientsRedirect, (req, res, next) => {
-    res.render('request.ejs', { title: 'Request an appointment' });
+    res.render('request.ejs', { title: 'Request an appointment', reason: "", errorMessage: "" });
 });
 
 // Stores the patients appointment request in the database
-router.post('/request', patientsRedirect, (req, res, next) => {
-    const result = appointmentsModel.insertRequest([req.body.reason, req.session.userID]);
-    res.send('Appointment request sent');
-});
+router.post('/request', patientsRedirect, 
+    [
+        check('reason').isString().isLength({ min: 5, max: 255 }).withMessage("Please input between 5-255 characters")
+    ], (req, res, next) => {
+        const reason = req.sanitize(req.body.reason); // Sanitise the input
+        // Check for validation errors
+        const errors = validationResult(req);
+        // Render the view with the error message
+        if(!errors.isEmpty()) {
+            const errorMessage = errors.errors[0].msg
+            return res.render('request.ejs', { title: 'Request an appointment', reason, errorMessage });
+        }
+        const result = appointmentsModel.insertRequest([req.body.reason, req.session.userID]);
+        res.send('Appointment request sent');
+    }
+);
 
 // Export the router object so index.js can access it
 module.exports = router;

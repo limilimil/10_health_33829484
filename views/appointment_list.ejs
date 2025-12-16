@@ -21,13 +21,13 @@
   <!-- <p><button type="submit" name="page" value="1">Submit</button></p> -->
 </form>
 <%- include('./partials/appointmentsTable') %>
-<a href="appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) -1, 1), totalPages) }) %>">Previous</a>
+<a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) -1, 1), totalPages) }) %>">Previous</a>
 <% for (let i = 1; i < totalPages+1; i++) { %>
   <% if (i === Number(filters.page)) { %>
     <span style="font-weight: bold;"><%= i %></span>
   <% } else { %>
-    <a href="appointments?<%= new URLSearchParams({ ...filters, page: i }) %>"><%= i %></a>
+    <a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({ ...filters, page: i }) %>"><%= i %></a>
   <% } %>
 <% } %>
-<a href="appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) +1, 1), totalPages) }) %>">Next</a>
+<a href="<%= process.env.HEALTH_BASE_PATH %>/doctors/appointments?<%= new URLSearchParams({...filters, page: Math.min(Math.max(Number(page) +1, 1), totalPages) }) %>">Next</a>
 

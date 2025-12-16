@@ -12,11 +12,10 @@ const patientsRedirect = redirectLogin({ sessionID: 'userID', redirectPath: '/pa
 
 // Route handlers
 router.get('/', patientsRedirect, async (req, res, next) => {
-
     if(req.session.userID) {
         try {
             const id = await patientsModel.getID(req.session.userID);
-            const appointments = await appointmentsModel.patientAppointments(id);
+            const appointments = await appointmentsModel.patientAppointments(id, upcomingOnly = true);
 
             res.render('appointments.ejs', { title: 'Appointments', appointments });
         } catch (err) {

@@ -45,6 +45,11 @@ const appointmentsModel = {
         if (values?.unassigned) {
             predicates.push("doctor_id IS NULL");
         }
+
+        if (values?.upcoming) {
+            predicates.push("(appointment_datetime > CURDATE() OR (appointment_datetime IS NULL AND status_id = (SELECT id FROM appointment_states WHERE status = 'pending')))");
+        }
+
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
             const where = " WHERE " + predicates.join(" AND ");
@@ -62,12 +67,15 @@ const appointmentsModel = {
         const page = values?.page || 1; // First page is returned if none specified
         const offset = (page - 1) * limit;
 
-
-
         // // Combine WHERE predicates into a single statement
         const subquery = this.filterBuilder(values);
         query += subquery.where;
         let params = subquery.params;
+
+        // Rows without a date and status pending (unfulfilled appointment requests) are ordered first followed by appointment date in descending order 
+        query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 ELSE 1 END, appointment_datetime DESC";
+
+        // Applies a limit on the number of rows returned
         query += " LIMIT ? OFFSET ?";
         params.push(limit);
         params.push(offset);
@@ -92,8 +100,8 @@ const appointmentsModel = {
     },
 
     // Helper function for retrieving all appointments for a patient
-    async patientAppointments(patient_id) {
-        return this.getAppointments({ patient_id });
+    async patientAppointments(patient_id, upcomingOnly = false) {
+        return this.getAppointments({ patient_id, upcoming: upcomingOnly });
     },
 
     async updateAppointment(details) {

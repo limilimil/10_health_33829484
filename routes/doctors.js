@@ -125,12 +125,12 @@ router.get('/appointments/:id', adminRedirect, async (req, res, next) => {
         // Prevent changes to the appointment form if the appointment date has already passed
         let disableForm = "";
         const now = new Date();
-        if(appointment.appointment_datetime < now) {
+        if(appointment?.appointment_datetime < now) {
             disableForm = "disabled";
         }
 
         // Convert date to the correct format for html datetime-local input
-        if(appointment.appointment_datetime) {
+        if(appointment?.appointment_datetime) {
             appointment.appointment_datetime = appointment.appointment_datetime.toISOString().slice(0, 16);
         }
         

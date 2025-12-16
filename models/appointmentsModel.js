@@ -110,6 +110,12 @@ const appointmentsModel = {
         return result;
     },
 
+    async cancel(id) {
+        const query = "UPDATE appointments SET appointment_datetime = NULL, status_id = (SELECT id FROM appointment_states WHERE status = 'cancelled'), doctor_id = NULL WHERE id = ?"
+        const result = await db.query(query, id);
+        return result;
+    },
+
     async getStates() {
         const query = "SELECT status FROM appointment_states";
         const [result] = await db.query(query);

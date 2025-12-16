@@ -1,6 +1,6 @@
 <h1>Appointments</h1>
 <a href="appointments/request">Request an appointment</a>
-<form>
+<form method="POST">
   <table>
     <thead>
       <tr>
@@ -8,6 +8,7 @@
         <th>Status</th>
         <th>Doctor</th>
         <th>Reason</th>
+        <th>Cancel?</th>
       </tr>
     </thead>
     <tbody>
@@ -17,6 +18,9 @@
           <td><%= appointments[i].status %></td>
           <td><%= appointments[i].doctor_name ? `Dr ${appointments[i].doctor_name}` : "TBC" %></td>
           <td><%= appointments[i].reason %></td>
+          <td>
+            <button type="submit" id="id" name="id" value="<%= appointments[i].id %>">Cancel</button>
+          </td>
         </tr>
       <% } %>
     </tbody>

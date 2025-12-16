@@ -1,2 +1,28 @@
 <h1>Welcome <%=patientName %></h1>
-
+<h2>Your upcoming appointments</h2>
+<form method="POST">
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Doctor</th>
+        <th>Reason</th>
+        <th>Cancel?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < upcomingAppointments.length; i++) { %>
+        <tr>
+          <td><%= upcomingAppointments[i].appointment_datetime %></td>
+          <td><%= upcomingAppointments[i].status %></td>
+          <td><%= upcomingAppointments[i].doctor_name ? `Dr ${upcomingAppointments[i].doctor_name}` : "TBC" %></td>
+          <td><%= upcomingAppointments[i].reason %></td>
+          <td>
+            <button type="submit" id="id" name="id" value="<%= upcomingAppointments[i].id %>">Cancel</button>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</form>

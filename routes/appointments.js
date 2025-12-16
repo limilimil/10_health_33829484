@@ -16,19 +16,13 @@ router.get('/', patientsRedirect, async (req, res, next) => {
     if(req.session.userID) {
         try {
             const id = await patientsModel.getID(req.session.userID);
-            const appointments = await appointmentsModel.patientAppointments(id, upcomingOnly = true);
+            const appointments = await appointmentsModel.patientAppointments(id);
 
             res.render('appointments.ejs', { title: 'Appointments', appointments });
         } catch (err) {
             console.error(err);
         }
     }
-});
-
-// Cancels an apppointment
-router.post('/', patientsRedirect, (req, res, next) => {
-    const result = appointmentsModel.cancel([req.body.id]);
-    res.send('Appointment cancelled');
 });
 
 // Handles the appointment request route

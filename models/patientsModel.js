@@ -58,6 +58,12 @@ const patientsModel = {
             predicates.push("last_name LIKE ?");
             params.push("%" + values.last_name + "%");
         }
+
+        // Filter patients by username
+        if(values?.username) {
+            predicates.push("username = ?");
+            params.push(values.username);
+        }
         
         // Combine WHERE predicates into a single statement
         if (predicates.length > 0) {
@@ -78,6 +84,10 @@ const patientsModel = {
     // Helper function for retrieving a single patient by id
     async getPatient(patient_id) {
         return this.getPatients({ id: patient_id });
+    },
+    // Helper function for retrieving a single patient by username
+    async getPatientWithUsername(username) {
+        return this.getPatients({ username: username });
     }
 }
 

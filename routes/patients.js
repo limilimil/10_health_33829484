@@ -3,9 +3,12 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult, matchedData } = require('express-validator');
 
+// For password hashing
 const bcrypt = require('bcrypt');
 
+// Data models
 const patientsModel = require('../models/patientsModel');
+const appointmentsModel = require('../models/appointmentsModel');
 
 // Middleware
 const redirectLogin = require('../middleware/redirectLogin');
@@ -46,15 +49,25 @@ function validatekNHSNumber(nhsNumber) {
 router.get('/', patientsRedirect, async (req, res, next) => {
     let patientName = ""; // Blank name in case of failure
 
-    // Get the patients first name to display on the page
     if(req.session.userID) {
         try {
-            patientName = await patientsModel.getName(req.session.userID);
+            // Get the patients first name to display on the page
+            const result = await patientsModel.getPatientWithUsername(req.session.userID);
+            const patient = result[0]; // Only first result is needed
+            // Retrieve the first 10 entries of upcoming appointments only
+            upcomingAppointments = await appointmentsModel.getAppointments({ patient_id: patient.id, upcoming: true }, 10)
+            patientName = patient.first_name;
         } catch (err) {
             console.error(err);
         }
     }
-    res.render('patients.ejs', { title: 'Overview', patientName } );
+    res.render('patients.ejs', { title: 'Overview', patientName, upcomingAppointments} );
+});
+
+// Cancels an apppointment
+router.post('/', patientsRedirect, async (req, res, next) => {
+    const result = await appointmentsModel.cancel([req.body.id]);
+    res.send('Appointment cancelled');
 });
 
 // Login route

@@ -85,7 +85,7 @@ const appointmentsModel = {
         let params = subquery.params;
 
         // Rows without a date and status pending (unfulfilled appointment requests) are ordered first followed by appointment date in ascending order 
-        query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 ELSE 1 END, appointment_datetime ASC";
+        query += " ORDER BY CASE WHEN status = 'pending' AND appointment_datetime IS NULL THEN 0 WHEN appointment_datetime IS NOT NULL THEN 1 ELSE 2 END, appointment_datetime ASC";
 
         // Applies a limit on the number of rows returned
         query += " LIMIT ? OFFSET ?";
